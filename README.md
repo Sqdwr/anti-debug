@@ -3,6 +3,7 @@
 - 代码来自书籍《有趣的二进制》
 - 学校破网上传一直失败，我在这直接拷贝代码上来好了
 
+```c
 #include <iostream>
 #include <Windows.h>
 using namespace std;
@@ -95,3 +96,4 @@ int main()
 	system("pause");
 	return 0;
 }
+```
