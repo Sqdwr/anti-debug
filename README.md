@@ -82,11 +82,32 @@ int __declspec(naked) BoolDebug3()
 	}
 }
 
+/*IDA内部的反汇编的代码是这样的
+.text:004118A0 ?BoolDebug4@@YAHXZ proc near            ; CODE XREF: BoolDebug4(void)↑j
+.text:004118A0                                         ; BoolDebug4(void)↑j
+.text:004118A0                 jmp     short near ptr ?BoolDebug4@@YAHXZ+1 ; BoolDebug4(void)
+.text:004118A2 ; ---------------------------------------------------------------------------
+.text:004118A2                 adc     eax, offset __imp__IsDebuggerPresent@0 ; IsDebuggerPresent()
+.text:004118A7                 retn
+.text:004118A7 ?BoolDebug4@@YAHXZ endp
+
+EB FF的意思是跳转到当前指令的下一个字节，而当前指令的下一个字节就是正确的call IsDebuggerPresent了
+*/
+int __declspec(naked) BoolDebug4()
+{
+	__asm
+	{
+		_emit 0xEB;
+		call IsDebuggerPresent;
+		ret;
+	}
+}
+
 int main()
 {
 	BOOL tFlag;
 
-	tFlag = BoolDebug3();
+	tFlag = BoolDebug4();
 
 	if (tFlag)
 		MessageBoxA(GetDesktopWindow(), "当前被调试！", "", MB_OK);
