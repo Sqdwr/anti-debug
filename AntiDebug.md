@@ -103,7 +103,7 @@ int __declspec(naked) BoolDebug4()
 	}
 }
 
-BOOL BoolDebug4()
+BOOL BoolDebug5()
 {
 	typedef NTSTATUS(NTAPI *NTQUERYINFORMATIONPROCESS)(
 		IN HANDLE ProcessHandle,
