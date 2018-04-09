@@ -103,6 +103,40 @@ int __declspec(naked) BoolDebug4()
 	}
 }
 
+BOOL BoolDebug4()
+{
+	typedef NTSTATUS(NTAPI *NTQUERYINFORMATIONPROCESS)(
+		IN HANDLE ProcessHandle,
+		IN ULONG InformationClass,
+		OUT PVOID ProcessInformation,
+		IN ULONG ProcessInformationLength,
+		OUT PULONG ReturnLength OPTIONAL
+		);
+
+	NTQUERYINFORMATIONPROCESS NtQueryInformationProcess = NULL;
+	NtQueryInformationProcess = (NTQUERYINFORMATIONPROCESS)GetProcAddress(LoadLibraryA("ntdll.dll"), "NtQueryInformationProcess");
+
+	if (NtQueryInformationProcess == NULL)
+	{
+		cout << "获取函数失败！" << endl;
+		return false;
+	}
+
+	ULONG DebugPort;
+	ULONG RetLength = 0;
+	ULONG Status =	NtQueryInformationProcess((HANDLE)-1, 0x7, &DebugPort, sizeof(DebugPort), &RetLength);
+	if (Status != 0)
+	{
+		cout << "查询进程信息失败！" << endl;
+		return false;
+	}
+
+	if (DebugPort == 0)
+		return false;
+
+	return true;
+}
+
 int main()
 {
 	BOOL tFlag;
