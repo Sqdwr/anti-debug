@@ -1,2 +1,14 @@
-0xEB 0xFF 0xC0 0x48
-作为一个百试不爽的混淆代码，0xEB 0xFF是跳到-1，就是0xFF 0xC0是inc eax，0x48 则代表dec eax。本代码毫无任何作用，但是可以混淆汇编代码。
+```C
+void __declspec(naked) Mix()
+{
+	_asm
+	{
+		_emit 0xEB;
+		_emit 0xFF;						//JMP -1之后执行FF C0(inc eax)，48（dec eax）
+		_emit 0xC0;
+		_emit 0x48;
+
+		ret;
+	}
+}
+```
