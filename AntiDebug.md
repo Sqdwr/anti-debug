@@ -137,16 +137,20 @@ BOOL BoolDebug5()
 	return true;
 }
 
+BOOL __declspec(naked) BoolDebug6()
+{
+	__asm
+	{
+		mov eax, dword ptr fs : [30h];
+		xor ebx, ebx;
+		mov bl, byte ptr[eax + 2];
+		mov eax, ebx;
+		ret;
+	}
+}
+
 int main()
 {
-	BOOL tFlag;
-
-	tFlag = BoolDebug4();
-
-	if (tFlag)
-		MessageBoxA(GetDesktopWindow(), "当前被调试！", "", MB_OK);
-	else
-		MessageBoxA(GetDesktopWindow(), "当前未被调试！", "", MB_OK);
 
 	system("pause");
 	return 0;
