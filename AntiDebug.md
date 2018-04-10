@@ -149,6 +149,27 @@ BOOL __declspec(naked) BoolDebug6()
 	}
 }
 
+BOOL __declspec(naked) BoolDebug7()
+{
+	__asm
+	{
+		rdtsc;
+		mov ebx, eax;
+		mov ecx, edx;
+		rdtsc;
+
+		sub ecx, edx;
+		jnz End;						//如果高32位相减不为0代表耗时非常长，因此这里直接跳转被调试
+
+		sub eax, ebx;
+		cmp eax, 0xFFFF;				//如果低32位差值超过0xFFFF则代表被调试
+		jnb End;
+		xor eax, eax;					//否则则清空eax，返回false
+End:
+		ret;
+	}
+}
+
 int main()
 {
 
